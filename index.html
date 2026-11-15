@@ -117,7 +117,7 @@ const SL={gb:[[1,"17:30","18:10"],[6,"16:30","17:10"],[0,"11:00","11:40"]],gi:[[
 const E=t=>String(t).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const chat=s=>s.link?`<a class="btn sm" href="${E(s.link)}" target="_blank" rel="noopener">Open chat</a>`:"";
 
-const sb=(window.CFG&&CFG.url&&CFG.url.startsWith("https://")&&!CFG.url.includes("YOUR"))?supabase.createClient(CFG.url,CFG.key):null;
+const sb=(window.CFG&&CFG.url&&CFG.url.startsWith("https://")&&!CFG.url.includes("YOUR"))?supabase.createClient(CFG.url,CFG.key,{auth:{persistSession:true}}):null;
 let D={n:0,rem:{},att:{},msg:{},st:[]};
 const fromRow=r=>({id:r.id,client:r.client,name:r.name,kind:r.kind,total:r.total,done:r.done,last:r.last_attended||"",start:r.start_date||"",agent:r.agent||"",price:Number(r.price),link:r.link||"",dates:r.dates||[]});
 const toRow=s=>({client:s.client,name:s.name,kind:s.kind,total:s.total,done:s.done,last_attended:s.last||null,start_date:s.start||null,agent:s.agent||"",price:s.price||0,link:s.link||"",dates:s.dates||[]});
@@ -218,11 +218,14 @@ const[pgr]=pager("log",r.count||0,["entry","entries"]),sm=x=>x.action=="Edited s
 el.innerHTML=(r.data.length?'<div class="list">'+r.data.map(x=>{const d=new Date(x.at),t=sm(x);return`<div class="row"><div class="time">${d.toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit"})}<small>${d.toLocaleDateString("en-US",{month:"short",day:"numeric"})}</small></div><div><div class="nm"><span class="ell">${E(x.action)}</span></div><div class="meta">${E(x.student||"")}${t?" · "+E(t):""}</div></div><div class="acts"><span class="meta">${E(x.actor||"")}</span></div></div>`}).join("")+"</div>":'<div class="empty">No activity yet.</div>')+pgr;ttl()}
 function live(){let t;const go=()=>{clearTimeout(t);t=setTimeout(async()=>{if(showAdd||/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;await load();render()},500)};
 sb.channel("live").on("postgres_changes",{event:"*",schema:"public",table:"students"},go).on("postgres_changes",{event:"*",schema:"public",table:"flags"},go).subscribe()}
-let booted=false;
+let booted=false,booting=false;
 async function boot(){if(booted||!sb)return;const{data:{session}}=await sb.auth.getSession();if(!session)return;
-const r=await sb.rpc("is_listed",{p_email:session.user.email});
-if(!r.data){await sb.auth.signOut();$("gm").textContent="This email isn’t listed. Please ask Aldrian to add you.";return}
+if(booting)return;booting=true;
+try{const r=await sb.rpc("is_listed",{p_email:session.user.email});
+if(r.error){$("gm").textContent="Could not verify this email. Please try again.";return}
+if(!r.data){$("gm").textContent="This email isn’t listed. Please ask Aldrian to add you.";return}
 booted=true;document.body.classList.add("in");await load();render();live()}
+finally{booting=false}}
 $("gf").onsubmit=async e=>{e.preventDefault();if(!sb)return;const em=$("ge").value.trim().toLowerCase(),b=$("gb");b.disabled=true;$("gm").textContent="Checking…";
 const c=await sb.rpc("is_listed",{p_email:em});
 if(c.error||!c.data){$("gm").textContent=c.error?"Could not check. Please try again.":"This email isn’t listed. Please ask Aldrian to add you.";b.disabled=false;return}

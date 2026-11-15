@@ -30,6 +30,7 @@ Then vercel.com > Add New > Project > import the repo. Framework Preset: **Other
 3. Open the URL, type your email, click the link in the email. You are in. Send the URL to your agents (add their emails first).
 
 ## Good to know
+- Closing the app or browser keeps you signed in. Use **Sign out** in the app to end your session.
 - **Add your students:** use the Add student button, or Table Editor > `students` > Insert > Import CSV (columns: `client, name, kind, total, done, last_attended, start_date, agent, price, link`; kind is `gb`, `gi`, `oo` or `fc`).
 - **Zoom link or café address changes:** Table Editor > `settings`.
 - **Activity Log:** the fourth page. It is written by the database itself, so agents cannot skip it, edit it, or delete it.
