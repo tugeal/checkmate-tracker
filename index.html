@@ -131,7 +131,7 @@ const saveStudent=s=>sb.from("students").update({done:s.done,last_attended:s.las
 const save=()=>{};
 const now=new Date(),PER=10;let tab="today",simD=iso(now),simT=P(now.getHours())+":"+P(now.getMinutes()),pg={today:1,stu:1,re:1,log:1},q="",ft="",showAdd=false;
 const grp=s=>s.kind=="gb"||s.kind=="gi",fin=s=>s.done>=s.total;
-const exp=s=>{if(!grp(s))return null;const d=new Date(s.start+"T00:00");d.setMonth(d.getMonth()+2);return iso(d)};
+const exp=s=>{if(!grp(s)||!s.start)return null;const d=new Date(s.start+"T00:00");d.setMonth(d.getMonth()+2);return iso(d)};
 const ex=(s,ds)=>{const e=exp(s);return e&&ds>e};
 function sess(ds,tom){const wd=new Date(ds+"T00:00").getDay(),o=[];
 D.st.forEach(s=>{if(fin(s))return;
