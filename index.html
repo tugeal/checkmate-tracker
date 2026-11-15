@@ -227,7 +227,7 @@ $("gf").onsubmit=async e=>{e.preventDefault();if(!sb)return;const em=$("ge").val
 const c=await sb.rpc("is_listed",{p_email:em});
 if(c.error||!c.data){$("gm").textContent=c.error?"Could not check. Please try again.":"This email isn’t listed. Please ask Aldrian to add you.";b.disabled=false;return}
 const r=await sb.auth.signInWithOtp({email:em,options:{emailRedirectTo:location.origin}});
-$("gm").textContent=r.error?"Could not send the link. Please wait a minute and try again.":"Check your email and click the sign-in link.";b.disabled=false};
+$("gm").textContent=r.error?`Could not send the link: ${r.error.message}`:"Check your email and click the sign-in link.";b.disabled=false};
 $("so").onclick=async()=>{if(sb)await sb.auth.signOut();location.reload()};
 clock();setInterval(clock,1000);
 if(!sb)$("gm").textContent="Setup needed: add your Supabase URL and key in config.js.";else{sb.auth.onAuthStateChange(()=>boot());boot()}
