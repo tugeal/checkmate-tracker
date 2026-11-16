@@ -30,9 +30,15 @@ Then vercel.com > Add New > Project > import the repo. Framework Preset: **Other
 3. Open the URL, type your email, click the link in the email. You are in. Send the URL to your agents (add their emails first).
 
 ## Good to know
-- Closing the app or browser keeps you signed in. Use **Sign out** in the app to end your session.
 - **Add your students:** use the Add student button, or Table Editor > `students` > Insert > Import CSV (columns: `client, name, kind, total, done, last_attended, start_date, agent, price, link`; kind is `gb`, `gi`, `oo` or `fc`).
 - **Zoom link or café address changes:** Table Editor > `settings`.
 - **Activity Log:** the fourth page. It is written by the database itself, so agents cannot skip it, edit it, or delete it.
 - **Never** put the `service_role` key in these files.
 - Vercel's free Hobby plan is for personal, non-commercial use. This same folder also works on Cloudflare Pages or Netlify if you need another free host.
+
+## On-duty alerts (only while the app is open)
+- Keep the tracker open in a pinned tab while on duty. Close it when off duty and no alerts appear.
+- First time only: click **Turn on alerts** at the top right, then **Allow** in the browser prompt.
+- An alert appears when a class is 3 hours away (and again at 1 hour if the client is still not marked as reminded), only between 8 AM and 9 PM, Monday to Saturday. Expired packages are skipped, and the alert clears for everyone when one agent marks it as reminded.
+- Each laptop (once): in Edge go to Settings > System and performance and add the site to **Never put these sites to sleep**; also turn off Windows Focus Assist / Do Not Disturb during work hours.
+- The sound switch is next to the alerts button. Sound starts working after the first click on the page.
